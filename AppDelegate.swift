@@ -7,6 +7,9 @@
 //
 
 import UIKit
+import KYDrawerController
+//http://sapandiwakar.in/programatically-set-the-initial-view-controller-using-storyboards/
+//https://github.com/ykyouhei/KYDrawerController/
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -16,7 +19,34 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        Thread.sleep(forTimeInterval: 3.0)
         print("This changes are made for sample branch.")
+        
+        let mainViewController   = MainViewController()
+        let drawerViewController = DrawerViewController()
+        let drawerController     = KYDrawerController(drawerDirection: .left, drawerWidth: 300)
+        drawerController.mainViewController = UINavigationController(
+            rootViewController: mainViewController
+        )
+        drawerController.drawerViewController = drawerViewController
+        
+        window = UIWindow(frame: UIScreen.main.bounds)
+        window?.rootViewController = drawerController
+        window?.makeKeyAndVisible()
+        
+        /*
+        var navigationController: UINavigationController? = (self.window?.rootViewController as? UINavigationController)
+        var storyboard = UIStoryboard(name: "Main", bundle: nil)
+        if self.isUserLoggedIn() {
+            // Show the dashboard
+            navigationController?.pushViewController(storyboard.instantiateViewController(withIdentifier: "SDDashboardViewController"), animated: false)
+        }
+        else {
+            // Login
+            navigationController?.pushViewController(storyboard.instantiateViewController(withIdentifier: "SDLoginViewController"), animated: false)
+        }
+ */
+
         return true
     }
 
@@ -40,6 +70,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+    }
+    
+    class func sharedInstance() -> AppDelegate{
+        return UIApplication.shared.delegate as! AppDelegate
     }
 
 
